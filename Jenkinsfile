@@ -1,61 +1,44 @@
 pipeline {
     agent any
 
-    environment {
-        // You can define environment variables here, if needed
-        PROJECT_NAME = 'MyProject'
-        BUILD_DIR = 'build'
-    }
-
     stages {
-        // Stage 1: Checkout the source code from GitHub
-        stage('Checkout') {
+        stage('Clone') {
             steps {
-                echo 'Checking out the code from GitHub...'
-                git 'https://github.com/Samvardhani/Jenkins.git' // Change to your GitHub repo URL
+                git 'https://github.com/Samvardhani/Jenkins.git'  // Clone your GitHub repository
             }
         }
 
-        // Stage 2: Build the project
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'  // Install dependencies (for Node.js)
+            }
+        }
+
         stage('Build') {
             steps {
-                echo 'Building the project...'
-                script {
-                    // Add your build commands here, like Maven, Gradle, npm, etc.
-                    sh 'echo "Building project..."'  // Replace with your actual build command
-                }
+                sh 'npm run build'  // Build your app (adjust as needed)
             }
         }
 
-        // Stage 3: Test the project
-        stage('Test') {
+        stage('Archive Artifacts') {
             steps {
-                echo 'Running tests...'
-                script {
-                    // Add your test commands here
-                    sh 'echo "Running tests..."'  // Replace with your actual test command
-                }
+                archiveArtifacts artifacts: 'build/**', followSymlinks: false  // Archive build output
             }
         }
 
-        // Stage 4: Deploy the project
         stage('Deploy') {
             steps {
-                echo 'Deploying the project...'
-                script {
-                    // Add your deploy commands here, like FTP, SSH, etc.
-                    sh 'echo "Deploying project..."'  // Replace with your actual deploy command
-                }
+                echo 'Deploy step placeholder'  // Placeholder for deployment logic
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline executed successfully!'
+            echo '✅ Build succeeded!'
         }
         failure {
-            echo 'Pipeline failed. Please check the logs.'
+            echo '❌ Build failed.'
         }
     }
 }
