@@ -2,21 +2,21 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone') {
+        stage('Build') {
             steps {
-                git 'https://github.com/Samvardhani/Jenkins.git'
+                echo 'Building...'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Test') {
             steps {
-                bat 'pip install -r requirements.txt'
+                echo 'Testing...'
             }
         }
 
-        stage('Run Tests') {
+        stage('Deploy') {
             steps {
-                bat 'pytest'
+                echo 'Deploying...'
             }
         }
     }
